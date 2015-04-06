@@ -481,7 +481,7 @@ namespace ez
       }
 
       if (!footer.empty()) {
-        usage.append (footer);
+        usage.append("\n\nNotes:\n\n    ").append (footer);
       }
 
       return usage;

@@ -14,8 +14,8 @@ int main (int argc, const char** argv)
   //opt.syntax = "cli [-h] [-e|-f]  [-t modis|fy3a] -i Arg1,[ArgN] -o Arg";
   //实例
   opt.example = "./sbi.exe -i input1.h5,input2.h5,input3.h5 output.hdf";
-
-  ////设置命令行选项  help 命令将自动设置，无需再设置
+  opt.footer = "version:0.9,LIC:See MIT-LICENSE.";
+  ////设置命令行选项  -h,--usage,--help 命令将自动设置，无需再设置
   opt.add (
     "10",               // 默认值,可以设置为空.
     false,                  // 是否为必须?是则为1
@@ -39,8 +39,8 @@ int main (int argc, const char** argv)
   //无前导符的参数
   opt.add ("",true,1,"Output file argument.","output",ez::EZ_TEXT);
   //命令行中，可以使用"-bc"同时设置两个无参数的选项
-  opt.add("",false,0,"test combined arguments","-b",EZ_BOOL);
-  opt.add("",false,0,"test combined arguments","-c",EZ_BOOL);
+  opt.add("",false,0,"test combined arguments","-b");
+  opt.add("",false,0,"test combined arguments","-c");
 
   //互斥参数设置：使用逗号隔开一串第一个flag设置，互斥参数必须为可选，否则将出现逻辑问题
   opt.xorAdd("-d,-s");
