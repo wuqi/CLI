@@ -540,8 +540,8 @@ namespace ez
                 SplitDelim (args[i], delim, argOptions);
                 groups[Id].args.push_back (argOptions);
               }
-            } else if (std::find (unknownOptions.begin(), unknownOptions.end(), s) == unknownOptions.end()) {
-              unknownOptions.push_back (s);
+            } else if (std::find (unknownOptions.begin(), unknownOptions.end(), letter) == unknownOptions.end()) {
+              unknownOptions.push_back (letter);
             }
           }
         } else if (s.substr (0, 2) == "--") {
