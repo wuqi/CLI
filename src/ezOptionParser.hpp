@@ -27,11 +27,12 @@ v0.2.3 20150403 Remove ezOptionValidator,set validate function in OptionGroup.
 #include <algorithm>
 #include <limits>
 #include <sstream>
+#include <fstream>
 namespace ez
 {
 #define DEBUGLINE() printf("%s:%d\n", __FILE__, __LINE__);
-  enum EZ_TYPE { EZ_NOTYPE = 0, EZ_BOOL, EZ_INT8, EZ_UINT8, EZ_INT16, EZ_UINT16, EZ_INT32, EZ_UINT32, EZ_INT64, EZ_UINT64, EZ_FLOAT, EZ_DOUBLE, EZ_TEXT };
-  static const std::string EZ_TYPE_NAME[] = {"NOTYPE", "bool", "char", "unsigned char", "short", "unsigned short", "int", "unsigned int", "long", "unsigned long", "float", "double", "string"};
+  enum EZ_TYPE { EZ_NOTYPE = 0, EZ_BOOL, EZ_INT8, EZ_UINT8, EZ_INT16, EZ_UINT16, EZ_INT32, EZ_UINT32, EZ_INT64, EZ_UINT64, EZ_FLOAT, EZ_DOUBLE, EZ_TEXT, EZ_FILE };
+  static const std::string EZ_TYPE_NAME[] = {"NOTYPE", "bool", "char", "unsigned char", "short", "unsigned short", "int", "unsigned int", "long", "unsigned long", "float", "double", "string", "file"};
   static const char delim = ',';
   /* ################################################################### */
   // Variant that uses deep copies and references instead of pointers (less efficient).
@@ -42,6 +43,18 @@ namespace ez
 
     while (std::getline (ss, item, token)) {
       result.push_back (item);
+    }
+  };
+  static bool CheckFileExistence (const std::string& name)
+  {
+    std::ifstream f (name.c_str());
+
+    if (f.good()) {
+      f.close();
+      return true;
+    } else {
+      f.close();
+      return false;
     }
   };
   class OptionGroup
@@ -226,6 +239,18 @@ namespace ez
           case EZ_TEXT: {
             std::string example = "";
             return validate (example, badOptions);
+          }
+
+          case EZ_FILE: {
+            for (int i = 0; i < (int)args.size(); ++i) {
+              for (int j = 0; j < (int)args[i].size(); ++j) {
+                std::string arg = args[i].at (j);
+
+                if (!CheckFileExistence (arg)) {
+                  badOptions.push_back (args[i].at (j));
+                }
+              }
+            }
           }
 
           case EZ_NOTYPE:
@@ -481,7 +506,7 @@ namespace ez
       }
 
       if (!footer.empty()) {
-        usage.append("\n\nNotes:\n\n    ").append (footer);
+        usage.append ("\n\nNotes:\n\n    ").append (footer);
       }
 
       return usage;

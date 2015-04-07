@@ -41,6 +41,7 @@ int main (int argc, const char** argv)
   //命令行中，可以使用"-bc"同时设置两个无参数的选项
   opt.add("",false,0,"test combined arguments","-b");
   opt.add("",false,0,"test combined arguments","-c");
+  opt.add("",false,1,"test file arguments","-f,--file",ez::EZ_FILE);
 
   //互斥参数设置：使用逗号隔开一串第一个flag设置，互斥参数必须为可选，否则将出现逻辑问题
   opt.xorAdd("-d,-s");
