@@ -2,7 +2,7 @@
 
 这是一个简单的命令行解析程序，源代码在src文件夹下，其他两个文件夹是工程文件
 
-用了ezOptionParser(http://ezoptionparser.sourceforge.net/)，不过是重写的，原来那个基本是用C写的，现在换成STL了，增加了一些功能，把一些用不到的也删减了。
+用了ezOptionParser(http://ezoptionparser.sourceforge.net/ )，不过是重写的，原来那个基本是用C写的，现在换成STL了，增加了一些功能，把一些用不到的也删减了。
 
 主要修改：
 * vc6编译通过
