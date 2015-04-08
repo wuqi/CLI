@@ -6,7 +6,7 @@
 
 主要修改：
 * vc6编译通过
-* warnings（vc6 level 3,vs2010 level 3,mingw -Wall）
+* no warnings（vc6 level 3,vs2010 level 3,mingw -Wall）
 * 增加了unlabeled flag
 * 增加异或flag
 * 增加ez_file类型检测
