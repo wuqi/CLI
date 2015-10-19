@@ -115,6 +115,7 @@ namespace ez
             T temp;
             ss >> temp;
             out.push_back (temp);
+            ss.str("");
             ss.clear();
           }
         }
@@ -127,6 +128,7 @@ namespace ez
             T temp;
             ss >> temp;
             out.push_back (temp);
+            ss.str("");
             ss.clear();
           }
       }
@@ -151,6 +153,7 @@ namespace ez
             T temp;
             ss >> temp;
             out[0].push_back (temp);
+            ss.str("");
             ss.clear();
           }
         }
@@ -169,6 +172,7 @@ namespace ez
               T temp;
               ss >> temp;
               out[i].push_back (temp);
+              ss.str("");
               ss.clear();
             }
           }
@@ -273,6 +277,7 @@ namespace ez
         if (!minValue.empty()) {
           ss << minValue;
           ss >> mint;
+          ss.str("");
           ss.clear();
         } else {
           mint = std::numeric_limits<T>::min();
@@ -281,6 +286,7 @@ namespace ez
         if (!maxValue.empty()) {
           ss << maxValue;
           ss >> maxt;
+          ss.str("");
           ss.clear();
         } else {
           maxt = std::numeric_limits<T>::max();
@@ -289,10 +295,12 @@ namespace ez
         double min, max;
         ss << mint;
         ss >> min;
+        ss.str("");
         ss.clear();
         ss.str ("");
         ss << maxt;
         ss >> max;
+        ss.str("");
         ss.clear();
         ss.str ("");
 
@@ -302,6 +310,7 @@ namespace ez
             ss << args[i].at (j);
             double value;
             ss >> value;
+            ss.str("");
             ss.clear();
             ss.str ("");
 
@@ -396,6 +405,7 @@ namespace ez
           std::string argstr;
           ss << i;
           ss >> argstr;
+          ss.str("");
           ss.clear();
           g.argsFormat.append ("Arg").append (argstr).append (",");
         }
