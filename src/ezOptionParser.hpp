@@ -34,8 +34,12 @@ namespace ez
   enum EZ_TYPE { EZ_NOTYPE = 0, EZ_BOOL, EZ_INT8, EZ_UINT8, EZ_INT16, EZ_UINT16, EZ_INT32, EZ_UINT32, EZ_INT64, EZ_UINT64, EZ_FLOAT, EZ_DOUBLE, EZ_TEXT, EZ_FILE };
   static const std::string EZ_TYPE_NAME[] = {"NOTYPE", "bool", "char", "unsigned char", "short", "unsigned short", "int", "unsigned int", "long", "unsigned long", "float", "double", "string", "file"};
   static const char delim = ',';
-  /* ################################################################### */
-  // Variant that uses deep copies and references instead of pointers (less efficient).
+  /**
+  * @brief 拆分字符串
+  * @param s 输入字串
+  * @param token 拆分标记
+  * @param result 输出结果
+  */
   static void SplitDelim (const std::string& s, const char token, std::vector<std::string>& result)
   {
     std::stringstream ss (s);
@@ -45,6 +49,10 @@ namespace ez
       result.push_back (item);
     }
   };
+  /**
+  * @brief 检查文件是否存在
+  * @param name 文件名
+  */
   static bool CheckFileExistence (const std::string& name)
   {
     std::ifstream f (name.c_str());
@@ -57,25 +65,32 @@ namespace ez
       return false;
     }
   };
+  /**
+  * @brief 参数类
+  */
   class OptionGroup
   {
   public:
     OptionGroup() : expectArgs (0), isRequired (false), isSet (false) , needValidate (false), optType (EZ_NOTYPE), isUnlabeled (false) { }
     ~OptionGroup() {};
-    std::string defaults;
-    int expectArgs;
-    std::string help;
-    std::string argsFormat;
-    bool isRequired;
-    std::vector<std::string> flags;
-    bool isSet;
-    bool needValidate;
-    std::vector<std::vector<std::string> > args;
-    std::vector<std::string> validValues;
-    std::string maxValue;
-    std::string minValue;
-    EZ_TYPE optType;
-    bool isUnlabeled;
+    std::string defaults;  /** @brief 默认值  */
+    int expectArgs;  /** @brief 期望参数个数  */
+    std::string help;  /** @brief 参数说明  */
+    std::string argsFormat;  /** @brief 参数格式  */
+    bool isRequired;  /** @brief 是否必须  */
+    std::vector<std::string> flags;  /** @brief 参数标识  */
+    bool isSet;  /** @brief 是否设置  */
+    bool needValidate;  /** @brief 需要验证  */
+    std::vector<std::vector<std::string> > args;  /** @brief 参数列表  */
+    std::vector<std::string> validValues;  /** @brief 允许值  */
+    std::string maxValue;  /** @brief 最大值  */
+    std::string minValue;  /** @brief 最小值  */
+    EZ_TYPE optType;  /** @brief 参数类型  */
+    bool isUnlabeled;  /** @brief 是否为无标签参数(如input,output等不带前导符的参数)  */
+    /**
+    * @brief 获取参数
+    * @param out 输出参数值
+    */
     template <typename T>
     inline void get (T& out)
     {
@@ -99,6 +114,10 @@ namespace ez
         }
       }
     };
+    /**
+    * @brief 获取参数列表
+    * @param out 输出参数列表
+    */
     template <typename T>
     inline void getVector (std::vector<T>& out)
     {
@@ -133,6 +152,10 @@ namespace ez
           }
       }
     };
+    /**
+    * @brief 获取设置多次的参数列表
+    * @param out 输出参数列表
+    */
     template <typename T>
     inline void getMultiVector (std::vector< std::vector<T> >& out)
     {
@@ -179,6 +202,11 @@ namespace ez
         }
       }
     };
+    /**
+    * @brief 验证参数是否正确
+    * @param badOptions 错误信息
+    * @return 是否正确
+    */
     inline bool validate (std::vector<std::string>& badOptions)
     {
       if (needValidate) {
@@ -265,6 +293,11 @@ namespace ez
 
       return badOptions.empty();
     };
+    /**
+    * @brief 验证参数是否正确
+    * @param badOptions 错误信息
+    * @return 是否正确
+    */
     template<typename T>
     inline bool validate (T example, std::vector<std::string>& badOptions)
     {
@@ -343,7 +376,18 @@ namespace ez
       add ("", 0, 0, "Print this usage message", "-h,-help,--help,--usage");
     };
     inline ~ezOptionParser() {};
-    //flags split by comma
+    /**
+    * @brief 添加参数
+    * @param defaults 默认值
+    * @param required 是否必须填写
+    * @param expectArgs 期望传入数量(0表示不带,-1表示任意多个,1表示一个,2表示两个,以此类推,用逗号分隔)
+    * @param help 帮助信息,最终显示在help中
+    * @param flags 参数标识,可有多个,get时使用,用逗号分隔,没有带-或者--的,作为无标签的参数,传入时不需要带前导符,比如input,可以直接写"input",传的时候直接传文件名
+    * @param optType 参数类型
+    * @param minValue 最小值,若不需要则为""
+    * @param maxValue 最大值,若不需要则为""
+    * @param validListStr 有效值列表,设置后最大最小值无效,用逗号分隔,可以是数字或者单词,不需要则不指定或为""
+    */
     inline void add (const char* defaults, bool required, int expectArgs, const char* help, const char* flags, EZ_TYPE optType = EZ_NOTYPE, const std::string& minValue = std::string(), const std::string& maxValue = std::string(), const  char* validListStr = "")
     {
       int id = this->groups.size();
@@ -423,6 +467,10 @@ namespace ez
 
       this->groups.push_back (g);
     };
+    /**
+    * @brief 添加互斥参数(开关只能同时开启一个),互斥参数必须为可选，否则将出现逻辑问题
+    * @param xorlistStr 互斥参数列表,必须使用标识的第一个flag,用逗号分隔 opt.xorAdd("-d,-s");
+    */
     inline void xorAdd (const char* xorlistStr)
     {
       std::vector<std::string> list;
@@ -434,6 +482,11 @@ namespace ez
         }
       }
     };
+    /**
+    * @brief 获取参数,使用任意flag都可
+    * @param name 参数标识名
+    * @return 参数
+    */
     inline OptionGroup get (const char* name)
     {
       if (optionGroupIds.count (name)) {
@@ -442,6 +495,10 @@ namespace ez
 
       return OptionGroup();
     };
+    /**
+    * @brief 获取使用说明
+    * @return 获取使用说明
+    */
     inline std::string getUsage()
     {
       std::string usage;
@@ -521,6 +578,11 @@ namespace ez
 
       return usage;
     };
+    /**
+    * @brief 判断group是否设置
+    * @param name 标识名
+    * @return 1为已设置,0为未设置
+    */
     inline int isSet (const char* name)
     {
       std::string sname (name);
@@ -531,6 +593,9 @@ namespace ez
 
       return 0;
     };
+    /**
+    * @brief 解析参数,直接将argc argv传入
+    */
     inline void parse (int argc, const char* argv[])
     {
       if (argc < 1) {
@@ -619,6 +684,11 @@ namespace ez
         }
       }
     };
+    /**
+    * @brief 检查输入参数格式是否正确
+    * @param out 输出提示信息
+    * @return 输入参数格式是否正确
+    */
     inline bool checkValid (std::string& out)
     {
       int i, j;
