@@ -398,14 +398,14 @@ namespace ez
       return badOptions.empty();
     };
   };
-  class ezOptionParser
+  class OptionParser
   {
   public:
-    ezOptionParser(): unlabeledNumber (0)
+    OptionParser(): unlabeledNumber (0)
     {
       add ("", 0, 0, "Print this usage message", "-h,-help,--help,--usage");
     };
-    inline ~ezOptionParser() {};
+    inline ~OptionParser() {};
     /**
     * @brief 添加参数
     * @param defaults 默认值

@@ -1,12 +1,10 @@
 #include "ezOptionParser.hpp"
 #include <iostream>
-using namespace ez;
-
  
 int main (int argc, const char** argv)
 {
   //命令行程序
-  ezOptionParser opt;
+  ez::OptionParser opt;
 
   //概要说明
   opt.overview = "sbi:Make the Soil brightness index product.";
@@ -24,7 +22,7 @@ int main (int argc, const char** argv)
     "-s,--short",       // 选项的前导符，可以有多个，使用逗号隔开，
                         //    如果前导符中没有"-"或者 "--"，则认为是无标识的选项
                         //    即不需要前导符，直接传入
-    EZ_INT16,           //指定数据类型，指定后将自动判断类型的最大最小值,此后的参数为非必需参数
+    ez::EZ_INT16,           //指定数据类型，指定后将自动判断类型的最大最小值,此后的参数为非必需参数
                        
     "1",                //指定最小值，若不需要则为""
     "",                 //指定最大值，若不需要则为""
@@ -35,7 +33,7 @@ int main (int argc, const char** argv)
 
   opt.add ("modis", false, 1,"Input file type,modis or fy3a, default is modis.","-t,--type",ez::EZ_TEXT,"","","modis,fy3a");
 
-  opt.add ("",true,-1,"Input files arguments,test argument list.","-i,--inputs",EZ_TEXT);
+  opt.add ("",true,-1,"Input files arguments,test argument list.","-i,--inputs",ez::EZ_TEXT);
   //无前导符的参数
   opt.add ("",true,1,"Output file argument.","output",ez::EZ_TEXT);
   //命令行中，可以使用"-bc"同时设置两个无参数的选项
