@@ -5,66 +5,66 @@ using namespace ez;
  
 int main (int argc, const char** argv)
 {
-  //ÃüÁîĞĞ³ÌĞò
+  //å‘½ä»¤è¡Œç¨‹åº
   ezOptionParser opt;
 
-  //¸ÅÒªËµÃ÷
+  //æ¦‚è¦è¯´æ˜
   opt.overview = "sbi:Make the Soil brightness index product.";
-  //Óï·¨,²»×öËµÃ÷Ôò½«×Ô¶¯Éú³É
+  //è¯­æ³•,ä¸åšè¯´æ˜åˆ™å°†è‡ªåŠ¨ç”Ÿæˆ
   //opt.syntax = "cli [-h] [-e|-f]  [-t modis|fy3a] -i Arg1,[ArgN] -o Arg";
-  //ÊµÀı
+  //å®ä¾‹
   opt.example = "./sbi.exe -i input1.h5,input2.h5,input3.h5 output.hdf";
   opt.footer = "version:0.9,LIC:See MIT-LICENSE.";
-  ////ÉèÖÃÃüÁîĞĞÑ¡Ïî  -h,--usage,--help ÃüÁî½«×Ô¶¯ÉèÖÃ£¬ÎŞĞèÔÙÉèÖÃ
+  ////è®¾ç½®å‘½ä»¤è¡Œé€‰é¡¹  -h,--usage,--help å‘½ä»¤å°†è‡ªåŠ¨è®¾ç½®ï¼Œæ— éœ€å†è®¾ç½®
   opt.add (
-    "10",               // Ä¬ÈÏÖµ,¿ÉÒÔÉèÖÃÎª¿Õ.
-    false,                  // ÊÇ·ñÎª±ØĞë?ÊÇÔòÎª1
-    1,                  // Ö¸¶¨²ÎÊı¸öÊı£¬-1ÓÃÓÚ´«ÈëÁĞ±í,Ö¸¶¨-1Ê±×îÉÙĞèÒª1¸ö²ÎÊı.
-    "Test short args.", // °ïÖúËµÃ÷
-    "-s,--short",       // Ñ¡ÏîµÄÇ°µ¼·û£¬¿ÉÒÔÓĞ¶à¸ö£¬Ê¹ÓÃ¶ººÅ¸ô¿ª£¬
-                        //    Èç¹ûÇ°µ¼·ûÖĞÃ»ÓĞ"-"»òÕß "--"£¬ÔòÈÏÎªÊÇÎŞ±êÊ¶µÄÑ¡Ïî
-                        //    ¼´²»ĞèÒªÇ°µ¼·û£¬Ö±½Ó´«Èë
-    EZ_INT16,           //Ö¸¶¨Êı¾İÀàĞÍ£¬Ö¸¶¨ºó½«×Ô¶¯ÅĞ¶ÏÀàĞÍµÄ×î´ó×îĞ¡Öµ,´ËºóµÄ²ÎÊıÎª·Ç±ØĞè²ÎÊı
+    "10",               // é»˜è®¤å€¼,å¯ä»¥è®¾ç½®ä¸ºç©º.
+    false,                  // æ˜¯å¦ä¸ºå¿…é¡»?æ˜¯åˆ™ä¸º1
+    1,                  // æŒ‡å®šå‚æ•°ä¸ªæ•°ï¼Œ-1ç”¨äºä¼ å…¥åˆ—è¡¨,æŒ‡å®š-1æ—¶æœ€å°‘éœ€è¦1ä¸ªå‚æ•°.
+    "Test short args.", // å¸®åŠ©è¯´æ˜
+    "-s,--short",       // é€‰é¡¹çš„å‰å¯¼ç¬¦ï¼Œå¯ä»¥æœ‰å¤šä¸ªï¼Œä½¿ç”¨é€—å·éš”å¼€ï¼Œ
+                        //    å¦‚æœå‰å¯¼ç¬¦ä¸­æ²¡æœ‰"-"æˆ–è€… "--"ï¼Œåˆ™è®¤ä¸ºæ˜¯æ— æ ‡è¯†çš„é€‰é¡¹
+                        //    å³ä¸éœ€è¦å‰å¯¼ç¬¦ï¼Œç›´æ¥ä¼ å…¥
+    EZ_INT16,           //æŒ‡å®šæ•°æ®ç±»å‹ï¼ŒæŒ‡å®šåå°†è‡ªåŠ¨åˆ¤æ–­ç±»å‹çš„æœ€å¤§æœ€å°å€¼,æ­¤åçš„å‚æ•°ä¸ºéå¿…éœ€å‚æ•°
                        
-    "1",                //Ö¸¶¨×îĞ¡Öµ£¬Èô²»ĞèÒªÔòÎª""
-    "",                 //Ö¸¶¨×î´óÖµ£¬Èô²»ĞèÒªÔòÎª""
-    "1,10,15,20"        //Éè¶¨ÔÊĞíÖµ£¬Ä¬ÈÏÎª¿Õ£¬¶¼ÔÊĞí
+    "1",                //æŒ‡å®šæœ€å°å€¼ï¼Œè‹¥ä¸éœ€è¦åˆ™ä¸º""
+    "",                 //æŒ‡å®šæœ€å¤§å€¼ï¼Œè‹¥ä¸éœ€è¦åˆ™ä¸º""
+    "1,10,15,20"        //è®¾å®šå…è®¸å€¼ï¼Œé»˜è®¤ä¸ºç©ºï¼Œéƒ½å…è®¸
   );
-  //Ìí¼ÓdoubleÀàĞÍ£¬±ØĞëÎªÁ½¸ö²ÎÊı
+  //æ·»åŠ doubleç±»å‹ï¼Œå¿…é¡»ä¸ºä¸¤ä¸ªå‚æ•°
   opt.add ("77,89",false,2,"Test range valid: range:10-100","-d,--double",ez::EZ_DOUBLE,"10.0","100.0");
 
   opt.add ("modis", false, 1,"Input file type,modis or fy3a, default is modis.","-t,--type",ez::EZ_TEXT,"","","modis,fy3a");
 
   opt.add ("",true,-1,"Input files arguments,test argument list.","-i,--inputs",EZ_TEXT);
-  //ÎŞÇ°µ¼·ûµÄ²ÎÊı
+  //æ— å‰å¯¼ç¬¦çš„å‚æ•°
   opt.add ("",true,1,"Output file argument.","output",ez::EZ_TEXT);
-  //ÃüÁîĞĞÖĞ£¬¿ÉÒÔÊ¹ÓÃ"-bc"Í¬Ê±ÉèÖÃÁ½¸öÎŞ²ÎÊıµÄÑ¡Ïî
+  //å‘½ä»¤è¡Œä¸­ï¼Œå¯ä»¥ä½¿ç”¨"-bc"åŒæ—¶è®¾ç½®ä¸¤ä¸ªæ— å‚æ•°çš„é€‰é¡¹
   opt.add("",false,0,"test combined arguments","-b");
   opt.add("",false,0,"test combined arguments","-c");
   opt.add("",false,1,"test file arguments","-f,--file",ez::EZ_FILE);
   opt.add("",false,1,"test dir arguments","-r,--dir",ez::EZ_DIR);
-  //»¥³â²ÎÊıÉèÖÃ£ºÊ¹ÓÃ¶ººÅ¸ô¿ªÒ»´®µÚÒ»¸öflagÉèÖÃ£¬»¥³â²ÎÊı±ØĞëÎª¿ÉÑ¡£¬·ñÔò½«³öÏÖÂß¼­ÎÊÌâ
+  //äº’æ–¥å‚æ•°è®¾ç½®ï¼šä½¿ç”¨é€—å·éš”å¼€ä¸€ä¸²ç¬¬ä¸€ä¸ªflagè®¾ç½®ï¼Œäº’æ–¥å‚æ•°å¿…é¡»ä¸ºå¯é€‰ï¼Œå¦åˆ™å°†å‡ºç°é€»è¾‘é—®é¢˜
   opt.xorAdd("-d,-s");
-  //½âÎöÃüÁîĞĞÑ¡Ïî
+  //è§£æå‘½ä»¤è¡Œé€‰é¡¹
   opt.parse (argc, argv);
-  //ÏÔÊ¾°ïÖú
+  //æ˜¾ç¤ºå¸®åŠ©
   if (opt.isSet("-h"))
   {
     std::cout<<opt.getUsage();
     return 0;
   }
 
-  //¼ì²â²ÎÊıÊäÈëÊÇ·ñÕıÈ·£¬²»ÕıÈ·Ôò·µ»Ø1£¬Í¬Ê±ÏÔÊ¾usage
+  //æ£€æµ‹å‚æ•°è¾“å…¥æ˜¯å¦æ­£ç¡®ï¼Œä¸æ­£ç¡®åˆ™è¿”å›1ï¼ŒåŒæ—¶æ˜¾ç¤ºusage
   std::string out;
   if (!opt.checkValid(out)) {
     std::cout << out;
     return 1;
   }
-  //ÏÔÊ¾¾¯¸æ
+  //æ˜¾ç¤ºè­¦å‘Š
   std::cout<<out;
-  //»ñÈ¡²ÎÊı,Ê¹ÓÃget»ñÈ¡µ¥¸ö²ÎÊı
-  //Ê¹ÓÃgetVector»ñÈ¡¶à¸ö²ÎÊı£¬·µ»ØvectorÁĞ±í
-  //Ê¹ÓÃgetMultiVector»ñÈ¡¶à¸öÑ¡ÏîËùÓĞµÄvectorÁĞ±í
+  //è·å–å‚æ•°,ä½¿ç”¨getè·å–å•ä¸ªå‚æ•°
+  //ä½¿ç”¨getVectorè·å–å¤šä¸ªå‚æ•°ï¼Œè¿”å›vectoråˆ—è¡¨
+  //ä½¿ç”¨getMultiVectorè·å–å¤šä¸ªé€‰é¡¹æ‰€æœ‰çš„vectoråˆ—è¡¨
   std::vector< std::string >  inputfiles;
   opt.get ("-i").getVector (inputfiles);
   std::string outputfile;
@@ -73,7 +73,7 @@ int main (int argc, const char** argv)
   opt.get("-t").get(inputType);
   std::string inputdir;
   if(opt.get("-r").isSet){opt.get("-r").get(inputdir);};
-  //ÅĞ¶Ï²ÎÊıÊÇ·ñÉèÖÃ£º
+  //åˆ¤æ–­å‚æ•°æ˜¯å¦è®¾ç½®ï¼š
   short svalue;
   double dvalue;
   bool bset = false,cset = false;
@@ -84,7 +84,7 @@ int main (int argc, const char** argv)
   }
   if(opt.get("-b").isSet){bset = true;}
   if(opt.get("-c").isSet){cset = true;}
-  //ÏÔÊ¾²ÎÊı:
+  //æ˜¾ç¤ºå‚æ•°:
   std::cout<<"Inputs:"<<std::endl;
   for (int i=0;i<(int)inputfiles.size();i++)
   {
