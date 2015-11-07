@@ -28,11 +28,15 @@ v0.2.3 20150403 Remove ezOptionValidator,set validate function in OptionGroup.
 #include <limits>
 #include <sstream>
 #include <fstream>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <stdio.h>
+#include <stdlib.h>
 namespace ez
 {
 #define DEBUGLINE() printf("%s:%d\n", __FILE__, __LINE__);
-  enum EZ_TYPE { EZ_NOTYPE = 0, EZ_BOOL, EZ_INT8, EZ_UINT8, EZ_INT16, EZ_UINT16, EZ_INT32, EZ_UINT32, EZ_INT64, EZ_UINT64, EZ_FLOAT, EZ_DOUBLE, EZ_TEXT, EZ_FILE };
-  static const std::string EZ_TYPE_NAME[] = {"NOTYPE", "bool", "char", "unsigned char", "short", "unsigned short", "int", "unsigned int", "long", "unsigned long", "float", "double", "string", "file"};
+  enum EZ_TYPE { EZ_NOTYPE = 0, EZ_BOOL, EZ_INT8, EZ_UINT8, EZ_INT16, EZ_UINT16, EZ_INT32, EZ_UINT32, EZ_INT64, EZ_UINT64, EZ_FLOAT, EZ_DOUBLE, EZ_TEXT, EZ_FILE,EZ_DIR };
+  static const std::string EZ_TYPE_NAME[] = {"NOTYPE", "bool", "char", "unsigned char", "short", "unsigned short", "int", "unsigned int", "long", "unsigned long", "float", "double", "string", "file","directory"};
   static const char delim = ',';
   /**
   * @brief 拆分字符串
@@ -64,6 +68,20 @@ namespace ez
       f.close();
       return false;
     }
+  };
+  /**
+  * @brief 检查文件是否存在
+  * @param name 文件名
+  */
+  static bool CheckDirExistence(const char *path)
+  {
+      struct stat info;
+      if(stat( path, &info ) != 0)
+          return false;
+      else if(info.st_mode & S_IFDIR)
+          return true;
+      else
+          return false;
   };
   /**
   * @brief 参数类
@@ -279,6 +297,18 @@ namespace ez
                 std::string arg = args[i].at (j);
 
                 if (!CheckFileExistence (arg)) {
+                  badOptions.push_back (args[i].at (j));
+                }
+              }
+            }
+          }
+
+          case EZ_DIR: {
+            for (int i = 0; i < (int)args.size(); ++i) {
+              for (int j = 0; j < (int)args[i].size(); ++j) {
+                std::string arg = args[i].at (j);
+
+                if (!CheckDirExistence (arg.c_str())) {
                   badOptions.push_back (args[i].at (j));
                 }
               }
@@ -573,7 +603,7 @@ namespace ez
       }
 
       if (!footer.empty()) {
-        usage.append ("\n\nNotes:\n\n    ").append (footer);
+        usage.append ("\n\nNotes:\n\n    ").append (footer).append ("\n");
       }
 
       return usage;

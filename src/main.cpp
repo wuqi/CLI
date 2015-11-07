@@ -42,7 +42,7 @@ int main (int argc, const char** argv)
   opt.add("",false,0,"test combined arguments","-b");
   opt.add("",false,0,"test combined arguments","-c");
   opt.add("",false,1,"test file arguments","-f,--file",ez::EZ_FILE);
-
+  opt.add("",false,1,"test dir arguments","-r,--dir",ez::EZ_DIR);
   //互斥参数设置：使用逗号隔开一串第一个flag设置，互斥参数必须为可选，否则将出现逻辑问题
   opt.xorAdd("-d,-s");
   //解析命令行选项
@@ -53,7 +53,6 @@ int main (int argc, const char** argv)
     std::cout<<opt.getUsage();
     return 0;
   }
-
 
   //检测参数输入是否正确，不正确则返回1，同时显示usage
   std::string out;
@@ -72,6 +71,8 @@ int main (int argc, const char** argv)
   opt.get ("output").get (outputfile);
   std::string inputType;
   opt.get("-t").get(inputType);
+  std::string inputdir;
+  if(opt.get("-r").isSet){opt.get("-r").get(inputdir);};
   //判断参数是否设置：
   short svalue;
   double dvalue;
@@ -94,6 +95,7 @@ int main (int argc, const char** argv)
   std::cout<<"short: "<<svalue<<std::endl;
   std::cout<<"type: "<<inputType<<std::endl;
   std::cout<<"output: "<<outputfile<<std::endl;
+  std::cout<<"inputdir: "<<inputdir<<std::endl;
   std::cout<<"b is set:"<<bset<<std::endl;
   std::cout<<"c is set:"<<cset<<std::endl;
   //processing
