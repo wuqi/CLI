@@ -626,7 +626,7 @@ namespace ez
     /**
     * @brief 解析参数,直接将argc argv传入
     */
-    inline void parse (int argc, const char* argv[])
+    inline void parse (int argc, const char * const * argv)
     {
       if (argc < 1) {
         return;
