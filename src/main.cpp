@@ -1,7 +1,7 @@
 #include "ezOptionParser.hpp"
 #include <iostream>
  
-int main (int argc, const char** argv)
+int main (int argc,  char** argv)
 {
   //命令行程序
   ez::OptionParser opt;
@@ -43,23 +43,10 @@ int main (int argc, const char** argv)
   opt.add("",false,1,"test dir arguments","-r,--dir",ez::EZ_DIR);
   //互斥参数设置：使用逗号隔开一串第一个flag设置，互斥参数必须为可选，否则将出现逻辑问题
   opt.xorAdd("-d,-s");
-  //解析命令行选项
-  opt.parse (argc, argv);
-  //显示帮助
-  if (opt.isSet("-h"))
-  {
-    std::cout<<opt.getUsage();
-    return 0;
+  //解析命令行选项,如果检测失败，直接退出
+  if (!opt.parse (argc, argv)) {
+    return -1;
   }
-
-  //检测参数输入是否正确，不正确则返回1，同时显示usage
-  std::string out;
-  if (!opt.checkValid(out)) {
-    std::cout << out;
-    return 1;
-  }
-  //显示警告
-  std::cout<<out;
   //获取参数,使用get获取单个参数
   //使用getVector获取多个参数，返回vector列表
   //使用getMultiVector获取多个选项所有的vector列表

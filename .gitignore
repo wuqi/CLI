@@ -20,3 +20,5 @@
 *ilk
 *bin*
 *makeitso.log
+*.opt
+*.plg
