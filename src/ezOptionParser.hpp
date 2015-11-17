@@ -65,15 +65,8 @@ static void SplitDelim( const std::string &s, const char token, \
 */
 static bool CheckFileExistence( const std::string &name )
 {
-  std::ifstream f( name.c_str() );
-
-  if( f.good() ) {
-    f.close();
-    return true;
-  } else {
-    f.close();
-    return false;
-  }
+  struct stat buffer;
+  return (stat(name.c_str(),&buffer) == 0);
 };
 /**
 * @brief 检查文件是否存在
@@ -311,6 +304,7 @@ public:
               }
             }
           }
+          break;
         }
 
         case EZ_DIR: {
@@ -323,6 +317,7 @@ public:
               }
             }
           }
+          break;
         }
 
         case EZ_NOTYPE:
