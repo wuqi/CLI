@@ -49,7 +49,7 @@ static const char delim = ',';
 * @param token 拆分标记
 * @param result 输出结果
 */
-static void SplitDelim( const std::string &s, const char token,
+static void SplitDelim( const std::string &s, const char token, \
                         std::vector<std::string> &result )
 {
   std::stringstream ss( s );
@@ -96,9 +96,13 @@ static bool CheckDirExistence( const char *path )
 */
 class OptionGroup {
 public:
-  OptionGroup() : expectArgs( 0 ), isRequired( false ), isSet( false ) ,
-    needValidate( false ), optType( EZ_NOTYPE ), isUnlabeled( false ),
-    groupID( 0 ) { }
+  OptionGroup() : expectArgs( 0 ), \
+                  isRequired( false ), \
+                  isSet( false ) , \
+                  needValidate( false ), \
+                  optType( EZ_NOTYPE ), \
+                  isUnlabeled( false ), \
+                  groupID( 0 ) { }
   ~OptionGroup() {};
   std::string defaults;  /** @brief 默认值  */
   int expectArgs;  /** @brief 期望参数个数  */
@@ -166,7 +170,7 @@ public:
         }
       }
     } else {
-      if( !( args.empty() || args[0].empty() ) )
+      if( !( args.empty() || args[0].empty() ) ){
         for( int i = 0; i < ( long int )args[0].size(); ++i ) {
           ss << args[0].at( i );
           T temp;
@@ -175,6 +179,7 @@ public:
           ss.str( "" );
           ss.clear();
         }
+      }
     }
   };
   /**
@@ -396,8 +401,7 @@ private:
         for( int j = 0; j < ( int )args[i].size(); ++j ) {
           std::string arg = args[i].at( j );
 
-          if( std::find( validValues.begin(), validValues.end(),
-                         arg ) == validValues.end() ) {
+          if( std::find( validValues.begin(), validValues.end(), arg ) == validValues.end() ) {
             badOptions.push_back( args[i].at( j ) );
           }
         }
@@ -470,8 +474,7 @@ public:
       /*reset some properties*/
       g.isUnlabeled = true;
       g.isRequired = true;/*option must be set if defined as unlabeled*/
-      unlabeledPos.insert( std::pair<int , std::string> ( unlabeledNumber,
-                           flagsVector[0] ) );
+      unlabeledPos.insert( std::pair<int , std::string> ( unlabeledNumber, flagsVector[0] ) );
       unlabeledNumber++;
       g.argsFormat.append( "(" );
     }
@@ -507,7 +510,7 @@ public:
     g.argsFormat.erase( g.argsFormat.size() - 1 );
 
     if( g.isUnlabeled ) {
-      g.argsFormat.append( " ) " );
+      g.argsFormat.append( " )" );
     }
 
     for( int i = 0; i < ( int )flagsVector.size(); ++i ) {
@@ -554,8 +557,10 @@ public:
   inline std::string getUsage()
   {
     std::string usage;
-    usage.append( "NAME: \n\n    " ).append(
-      overview ).append( "\n\n" ).append( "USAGE: \n\n    " );
+    usage.append( "NAME: \n\n    " )\
+         .append( overview )\
+         .append( "\n\n" )\
+         .append( "USAGE: \n\n    " );
     int i, j;
 
     if( syntax.empty() ) {
@@ -568,7 +573,7 @@ public:
 
       for( i = 0; i < ( int )groups.size(); i++ ) {
         OptionGroup g = groups[i];
-        std::string opt = " ";
+        std::string opt = "";
 
         if( g.groupID == 0 ) {
           /*no xor*/
@@ -590,8 +595,9 @@ public:
             xorGroupUsage[groupID - 1].append( " [" );
           }
 
-          xorGroupUsage[groupID - 1].append( g.flags[0] ).append(
-            g.argsFormat ).append( " | " );
+          xorGroupUsage[groupID - 1].append( g.flags[0] )\
+                                    .append( g.argsFormat )\
+                                    .append( " | " );
         }
 
         syntax.append( opt );
@@ -615,9 +621,12 @@ public:
         flags.append( g.flags[j] ).append( " " );
       }
 
-      usage.append( flags ).append(
-        g.argsFormat ).append( ":\n" ).append( "        " ).append(
-          g.help ).append( "\n" );
+      usage.append( flags )\
+           .append( g.argsFormat )\
+           .append( ":\n" )\
+           .append( "        " )\
+           .append( g.help )\
+           .append( "\n" );
     }
 
     if( !example.empty() ) {
@@ -693,7 +702,8 @@ public:
               SplitDelim( args[i], delim, argOptions );
               groups[Id].args.push_back( argOptions );
             }
-          } else if( std::find( unknownOptions.begin(), unknownOptions.end(),
+          } else if( std::find( unknownOptions.begin(), \
+                                unknownOptions.end(), \
                                 letter ) == unknownOptions.end() ) {
             unknownOptions.push_back( letter );
           }
@@ -715,7 +725,8 @@ public:
             SplitDelim( args[i], delim, argOptions );
             groups[Id].args.push_back( argOptions );
           }
-        } else if( std::find( unknownOptions.begin(), unknownOptions.end(),
+        } else if( std::find( unknownOptions.begin(), \
+                              unknownOptions.end(), \
                               s ) == unknownOptions.end() ) {
           unknownOptions.push_back( s );
         }
@@ -733,7 +744,8 @@ public:
           }
 
           unlabel++;
-        } else if( std::find( unknownOptions.begin(), unknownOptions.end(),
+        } else if( std::find( unknownOptions.begin(), \
+                              unknownOptions.end(), \
                               s ) == unknownOptions.end() ) {
           unknownOptions.push_back( s );
         }
@@ -771,7 +783,7 @@ public:
     for( i = 0; i < ( int )groups.size(); ++i ) {
       if( groups[i].isRequired && !groups[i].isSet ) {
         out.append( "ERROR: Argument " )\
-        .append( groups[i].flags[0] ).append( " must be set.\n" );
+           .append( groups[i].flags[0] ).append( " must be set.\n" );
         isValid = false;
       }
     }
@@ -783,7 +795,7 @@ public:
       if( g.isSet ) {
         if( g.expectArgs != 0 && g.args.empty() ) {
           out.append( "ERROR: Got unexpected number of arguments for option " ) \
-          .append( g.flags[0] ).append( ".\n" );
+             .append( g.flags[0] ).append( ".\n" );
           isValid = false;
           continue;
         }
@@ -791,9 +803,8 @@ public:
         for( j = 0; j < ( int )g.args.size(); ++j ) {
           if( ( g.expectArgs != -1 && g.expectArgs != ( int )g.args[j].size() )
               || ( g.expectArgs == -1 && g.args[j].size() == 0 ) ) {
-            out.append( "ERROR: Got unexpected number of arguments for option " )
-            \
-            .append( g.flags[0] ).append( ".\n" );
+            out.append( "ERROR: Got unexpected number of arguments for option " ) \
+               .append( g.flags[0] ).append( ".\n" );
             isValid = false;
           }
         }
@@ -807,8 +818,8 @@ public:
       if( !groups[i].validate( tempOptions ) ) {
         for( j = 0; j < ( int )tempOptions.size(); ++j ) {
           out.append( "ERROR: Got invalid argument \"" ) \
-          .append( tempOptions[j] ).append( "\" for option " ) \
-          .append( groups[i].flags[0] ).append( ".\n" );
+             .append( tempOptions[j] ).append( "\" for option " ) \
+             .append( groups[i].flags[0] ).append( ".\n" );
           isValid = false;
         }
       }
@@ -827,14 +838,14 @@ public:
       for( i = 0; i < ( int )xorIDs.size(); i++ ) {
         if( groups[xorIDs[i]].isSet ) {
           xorstr.append( " \"" ) \
-          .append( groups[xorIDs[i]].flags[0] ).append( "\" " );
+                .append( groups[xorIDs[i]].flags[0] ).append( "\" " );
           xorNum++;
         }
       }
 
       if( xorNum > 1 ) {
         out.append( "ERROR:Can't set xor options at the same time:" ) \
-        .append( xorstr ).append( "\n" );
+           .append( xorstr ).append( "\n" );
         isValid  = false;
       }
     }
@@ -842,8 +853,8 @@ public:
     /*print unknown OPTIONS*/
     if( ( int )unknownOptions.size() > 0 ) {
       for( i = 0; i < ( int )unknownOptions.size(); ++i ) {
-        out.append( "WARNING: Got unknown argument:" )
-        .append( unknownOptions[i] ).append( ".\n" );
+        out.append( "WARNING: Got unknown argument:" ) \
+           .append( unknownOptions[i] ).append( ".\n" );
       }
     }
 
@@ -856,23 +867,23 @@ public:
   };
   /*description*/
   std::string overview;  /** @brief 命令行工具作用简要说明  */
-  std::string
-  syntax;  /** @brief 命令行语法（可自动生成，如无必要可不比改）  */
+  /** @brief 命令行语法（可自动生成，如无必要可不比改）  */
+  std::string syntax;
   std::string example;  /** @brief 示例  */
   std::string footer;  /** @brief 脚注，说明license、作者等信息  */
 private:
   int unlabeledNumber;
   std::string _progName;  /** @brief 工具名称，直接从argv中解析得到  */
   /*members*/
-  std::map< std::string, int >
-  optionGroupIds;  /** @brief 参数标签哈希 key=>参数 value=>id   */
+  /** @brief 参数标签哈希 key=>参数 value=>id   */
+  std::map< std::string, int > optionGroupIds;
   std::vector<OptionGroup> groups;  /** @brief 参数组  */
-  std::map<int , std::vector<int> >
-  xorGroups;  /** @brief 互斥参数组哈希,key=>groupID,value=>参数ID列表  */
+  /** @brief 互斥参数组哈希,key=>groupID,value=>参数ID列表  */
+  std::map<int , std::vector<int> > xorGroups;
   std::vector<std::string> unknownOptions;  /** @brief 无标签参数组  */
   int xorGroupNum;  /** @brief xorGroup 总数  */
-  std::map<int, std::string>
-  unlabeledPos; /** @brief 无标签参数组名称位置对应表  */
+  /** @brief 无标签参数组名称位置对应表  */
+  std::map<int, std::string> unlabeledPos;
 };
 }
 /* ################################################################### */
