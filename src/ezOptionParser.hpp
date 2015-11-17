@@ -415,24 +415,33 @@ public:
   OptionParser(): unlabeledNumber( 0 ), xorGroupNum( 0 )
   {
     /* 添加help参数*/
-    add( "", 0, 0, "Print this usage message", "-h,--help,--usage" );
+    add( "-h,--help,--usage", false, 0, "Print this usage message" );
   };
   inline ~OptionParser() {};
   /**
   * @brief 添加参数
-  * @param defaults 默认值
+  * @param flags 参数标识,可有多个,get时使用,用逗号分隔
+                 没有带-或者--的,作为无标签的参数
+                 传入时不需要带前导符,比如input,可以直接写"input",传的时候直接传文件名
   * @param required 是否必须填写
-  * @param expectArgs 期望传入数量(0表示不带,-1表示任意多个,1表示一个,2表示两个,以此类推,用逗号分隔)
-  * @param help 帮助信息,最终显示在help中
-  * @param flags 参数标识,可有多个,get时使用,用逗号分隔,没有带-或者--的,作为无标签的参数,传入时不需要带前导符,比如input,可以直接写"input",传的时候直接传文件名
   * @param optType 参数类型
+  * @param expectArgs 期望传入数量
+                      0表示不带参数,
+                      -1表示任意多个,
+                      1表示一个,2表示两个,以此类推
+                      参数紧跟标志后，用逗号分隔)
+  * @param help 帮助信息,最终显示在help中
+  * @param defaults 默认值
   * @param minValue 最小值,若不需要则为""
   * @param maxValue 最大值,若不需要则为""
   * @param validListStr 有效值列表,设置后最大最小值无效,用逗号分隔,可以是数字或者单词,不需要则不指定或为""
   */
-  inline void add( const char *defaults, bool required, int expectArgs,
-                   const char *help, const char *flags,
+  inline void add( const char *flags,
+                   bool required = true,
+                   int expectArgs = 1, 
+                   const char *help = "", 
                    EZ_TYPE optType = EZ_NOTYPE,
+                   const char *defaults = "",
                    const std::string &minValue = std::string(),
                    const std::string &maxValue = std::string(),
                    const  char *validListStr = "" )
