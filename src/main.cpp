@@ -28,7 +28,7 @@ int main (int argc, const char** argv)
     "1,10,15,20"        //设定允许值，默认为空，都允许
   );
   //添加double类型，必须为两个参数
-  opt.add("-d,--double",false ,2, "Test range valid: range:10-100" ,ez::EZ_DOUBLE,"11,22","10.0", "100.0");
+  opt.add("-d,--double",false ,2, "Test range valid: range:10-100" ,ez::EZ_DOUBLE,"77,89","10.0", "100.0");
   opt.add("-t,--type",false,2, "Input file type,modis or fy3a, default is modis.",ez::EZ_TEXT,"modis","", "", "modis,fy3a");
   opt.add("-i,--inputs",true,-1,"Input files arguments,test argument list.");
 

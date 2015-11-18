@@ -1,27 +1,14 @@
-# CLI
+# ezOptionParser  修改版
 
-这是一个简单的命令行解析程序，源代码在src文件夹下，其他两个文件夹是工程文件
+这是一个简单的命令行解析库，仅只有一个hpp文件，修改自sourceforge上的ezOptionParser(http://ezoptionparser.sourceforge.net/ )库
 
-用了ezOptionParser(http://ezoptionparser.sourceforge.net/ )，不过是重写的，原来那个基本是用C写的，现在换成STL了，增加了一些功能，把一些用不到的也删减了。
+原来的库使用ansi C实现，现在使用STL和模板函数，对功能进行了增删，方便使用。
 
-###主要修改：
-* vc6编译通过
-* no warnings（vc6 level 3,vs2010 level 3,mingw -Wall）
-* 增加了unlabeled flag
-* 增加异或flag
-* 增加ez_file类型检测
-* 删除prettyPrint
-* 删除importFile
-* 删除ezOptionValidator，使用validate函数
-* 增加checkValid，删除gotExpected等几个函数
-* optiongroup中使用模板函数代替原来get**
-* 统一使用stringstream转换类型
-
-###使用说明：
+##使用说明：
 
 可以参见main.cpp中的示例，下面是详细的步骤说明：
 
-####初始化
+###初始化
 
 先初始化ez::OptionParser，设置示例、语法、概要说明，以及版权等。
 
@@ -35,7 +22,7 @@
   /*opt.syntax = "cli [-h] [-e|-f]  [-t modis|fy3a] -i Arg1,[ArgN] -o Arg";*/
 ```
 
-####添加option
+###添加option
 
 然后使用add函数，添加option(选项)，函数说明如下:
 
@@ -91,7 +78,7 @@
   opt.add ("output", true, 1, "Output file argument." );
 ```
 
-####指定互斥选项(可选)
+###指定互斥选项(可选)
 
 设置完成后，指定互斥选项，即哪些选项不能同时开启（若没有可以跳过），互斥选项的required必须为false，否则将出现逻辑问题。选项可以使用任意flag指定,不过显示只显示第一个.
 ```cpp
@@ -99,7 +86,7 @@
   opt.xorAdd ("-b,-f");
 ```
 
-####开始解析
+###开始解析
 
 全部设置完成后，即可开始解析,判断解析是否失败，失败则直接返回
 ```cpp
@@ -108,7 +95,7 @@
     }
 ```
 
-####获取选项参数
+###获取选项参数
 
   首先获取选项
 ```cpp
@@ -134,7 +121,7 @@
 
   获取完成后，即可开始运行程序
 
-###使用注意：
+##使用注意：
 
 * 使用语法如果没有设置，将自动生成
 * Flag使用逗号分隔，前导`-`或`--`为有参,前导为`-`的必须为单个字母,区分大小写
@@ -145,7 +132,7 @@
 * 可以多个无参数选项叠加
 * EZ_FILE、EZ_DIR类型将检测文件和目录是否存在，如果不存在检测将报错，一般用于输入类型，所以输出时请用EZ_TEXT类型
 
-### Changelog：
+##主要修改：
 
 2015-11-17
 
