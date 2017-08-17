@@ -19,6 +19,8 @@ v0.2.4 20151108 Add directory type Support
 v0.2.5 20151115 Change option parse function
 v0.2.6 20151117 XorGroup implement
                 Format and check code
+v0.2.7 20160803 Edit get function ,to get the space in the string(file path)
+v0.2.8 20170816 Windows min max marco problem 
 */
 #ifndef EZ_OPTION_PARSER_H
 #define EZ_OPTION_PARSER_H
@@ -112,6 +114,32 @@ public:
   EZ_TYPE optType;  /** @brief 参数类型  */
   bool isUnlabeled;  /** @brief 是否为无标签参数(如input,output等不带前导符的参数)  */
   int groupID;
+  /**
+  * @brief 获取参数
+  * @param out 输出参数值
+  */
+  inline void get( std::string &out )
+  {
+    std::stringstream ss;
+
+    if( !isSet ) {
+      if( defaults.empty() ) {
+        ss << "";
+        ss >> out;
+      } else {
+        ss << defaults;
+        ss >> out;
+      }
+    } else {
+      if( args.empty() || args[0].empty() ) {
+        ss << "";
+        ss >> out;
+      } else {
+        ss << args[0].at( 0 );
+        out = ss.str();
+      }
+    }
+  };
   /**
   * @brief 获取参数
   * @param out 输出参数值
@@ -351,7 +379,7 @@ private:
         ss.str( "" );
         ss.clear();
       } else {
-        mint = std::numeric_limits<T>::min();
+        mint = (std::numeric_limits<T>::min)();
       }
 
       if( !maxValue.empty() ) {
@@ -360,7 +388,7 @@ private:
         ss.str( "" );
         ss.clear();
       } else {
-        maxt = std::numeric_limits<T>::max();
+        maxt = (std::numeric_limits<T>::max)();
       }
 
       double min, max;
